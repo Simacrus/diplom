@@ -1,6 +1,5 @@
 const http = require("http");
 const Urok = require("./controller");
-const Taking = require("./controller");
 const { getReqData } = require("./utils");
 const PORT = process.env.PORT || 5000;
 
@@ -247,18 +246,18 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ token_user: LoginUser }));
     }
 
-else if (req.url === "/logout" && req.method === "GET") {
-    let user_data = await getReqData(req);
-    const user = JSON.parse(user_data);
-    await new Urok().logout(user.token_user);
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': '*',
-            'Access-Control-Allow-Headers': '*'
-        });
-    res.end("");
-    }
+// else if (req.url === "/logout" && req.method === "GET") {
+//     let user_data = await getReqData(req);
+//     const user = JSON.parse(user_data);
+//     await new Urok().logout(user.token_user);
+//         res.writeHead(200, {
+//             "Content-Type": "application/json",
+//             'Access-Control-Allow-Origin': '*',
+//             'Access-Control-Allow-Methods': '*',
+//             'Access-Control-Allow-Headers': '*'
+//         });
+//     res.end("");
+//     }
 });
 
 

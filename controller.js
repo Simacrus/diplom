@@ -135,39 +135,46 @@ class Controller {
 //user
 
 async createUser(id_user, FirstName, LastName, login, password) {
-    try {
-        return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
       connection.connect((err) => {
-      connection.query(
-        'INSERT INTO user SET ?',
-        {
-            id_user: id_user,
-            FirstName: FirstName,
-            LastName: LastName,
-            login: login,
-            password: hashPassword(password)
-  
-        },
-        (err, results, fields) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results.insertId);
-            }
-            connection.end((err) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log('Database closed');
-                }
-            });
-        });
-    })
-    });
-    } catch(err) {
-        throw (err);
-    }
-  }
+          if (err) {
+              reject(err);
+          } else {
+              console.log('Database connected');
+              connection.query(
+                  'INSERT INTO user SET ?',
+                  //òóòà ÿ óêàçûâàþçíà÷êåíèÿ êîòîðûå áóäóò ââîäèòüñÿ
+                  {
+                      id_user: id_user,
+                      FirstName: FirstName,
+                      LastName: LastName,
+                      login: login,
+                      password: hashPassword(password)
+
+                  },
+                  (err, results, fields) => {
+                      if (err) {
+                          reject(err);
+                      } else {
+                          resolve(results.insertId);
+                      }
+                      connection.end((err) => {
+                          if (err) {
+                              console.log(err);
+                          } else {
+                              console.log('Database closed');
+                          }
+                      });
+                  });
+          }
+      })
+  });
+
+
+}
+
+
+
 
   async loginUser(Login, Password) {
     return new Promise((resolve, reject) => {
@@ -244,41 +251,41 @@ async createUser(id_user, FirstName, LastName, login, password) {
     //     )
     // }
 
-    async logout(token_user) {
-        const promise = this.getIdUserByToken(token_user);
-        const id_user = await promise;
-        return new Promise((resolve, reject) => {
-            connection.connect((err) => {
-                if (err) {
-                    reject(err);
-                } else {
+    // async logout(token_user) {
+    //     const promise = this.getIdUserByToken(token_user);
+    //     const id_user = await promise;
+    //     return new Promise((resolve, reject) => {
+    //         connection.connect((err) => {
+    //             if (err) {
+    //                 reject(err);
+    //             } else {
 
-                    console.log('Database connected');
-                    console.log(token_user);
-                    connection.query(
-                        'UPDATE user SET token_user = NULL WHERE id_user = ?',
-                        [
+    //                 console.log('Database connected');
+    //                 console.log(token_user);
+    //                 connection.query(
+    //                     'UPDATE user SET token_user = NULL WHERE id_user = ?',
+    //                     [
 
-                            id_user
+    //                         id_user
 
-                        ],
-                        (err, results, fields) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(results);
-                            }
-                            connection.end((err) => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    console.log('Database closed');
-                                }
-                            });
-                        });
-                }
-            })
-        });
-    }
+    //                     ],
+    //                     (err, results, fields) => {
+    //                         if (err) {
+    //                             reject(err);
+    //                         } else {
+    //                             resolve(results);
+    //                         }
+    //                         connection.end((err) => {
+    //                             if (err) {
+    //                                 console.log(err);
+    //                             } else {
+    //                                 console.log('Database closed');
+    //                             }
+    //                         });
+    //                     });
+    //             }
+    //         })
+    //     });
+    // }
 };
 module.exports = Controller;
